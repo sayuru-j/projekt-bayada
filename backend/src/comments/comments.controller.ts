@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import type { User } from '@prisma/client';
 import { CommentsService } from './comments.service.js';
-import { CreateCommentDto } from './dto/comment.dto.js';
+import { CreateCommentDto, VoteCommentDto } from './dto/comment.dto.js';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 
@@ -33,9 +33,13 @@ export class CommentsController {
     return this.commentsService.remove(id, user);
   }
 
-  @Post('comments/:id/upvote')
+  @Post('comments/:id/vote')
   @UseGuards(JwtAuthGuard)
-  upvote(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: User) {
-    return this.commentsService.toggleUpvote(id, user.id);
+  vote(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
+    @Body() dto: VoteCommentDto,
+  ) {
+    return this.commentsService.castVote(id, user.id, dto.type);
   }
 }

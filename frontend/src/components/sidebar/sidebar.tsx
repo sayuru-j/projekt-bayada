@@ -44,7 +44,7 @@ export function Sidebar({ onReport, onGoToMyLocation, className, ...listProps }:
               type="button"
               onClick={onReport}
               title={tr('report')}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-accent transition hover:bg-accent/10 hover:shadow-[0_0_14px_rgba(57,255,20,0.35)]"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-accent transition hover:bg-accent/10"
             >
               <Plus size={18} />
             </button>

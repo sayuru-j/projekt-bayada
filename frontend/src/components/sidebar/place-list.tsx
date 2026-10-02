@@ -217,7 +217,7 @@ function PlaceRow({
         className={cn(
           'group flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-[background-color,border-color,box-shadow] duration-150',
           active
-            ? 'glow-accent border-accent bg-surface-2'
+            ? 'border-accent/70 bg-surface-2'
             : 'border-transparent hover:bg-white/[0.04]',
         )}
       >

@@ -29,7 +29,7 @@ export function Button({
           'bg-ink text-[#111] shadow-[0_1px_0_rgba(255,255,255,0.4)_inset,0_8px_20px_-10px_rgba(255,255,255,0.35)] hover:bg-white',
 
         variant === 'accent' &&
-          'bg-accent text-[#041a08] shadow-[0_0_20px_rgba(57,255,20,0.35),0_1px_0_rgba(255,255,255,0.3)_inset] hover:brightness-110',
+          'bg-accent text-[#041a08] shadow-[0_1px_0_rgba(255,255,255,0.28)_inset,0_8px_18px_-10px_rgba(0,0,0,0.65)] hover:brightness-110',
 
         variant === 'outline' &&
           'border border-border-strong bg-transparent text-ink hover:border-[#4a4a4a] hover:bg-white/[0.04]',

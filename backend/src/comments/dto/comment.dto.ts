@@ -1,4 +1,4 @@
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { IsIn, IsString, MaxLength, MinLength } from 'class-validator';
 import {
   COMMENT_MAX_LENGTH,
   COMMENT_MIN_LENGTH,
@@ -9,4 +9,10 @@ export class CreateCommentDto {
   @MinLength(COMMENT_MIN_LENGTH)
   @MaxLength(COMMENT_MAX_LENGTH)
   body!: string;
+}
+
+export class VoteCommentDto {
+  @IsString()
+  @IsIn(['up', 'down'])
+  type!: 'up' | 'down';
 }

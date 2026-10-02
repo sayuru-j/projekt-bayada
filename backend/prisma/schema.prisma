@@ -25,6 +25,11 @@ enum MediaType {
   youtube
 }
 
+enum CommentVoteType {
+  up
+  down
+}
+
 model User {
   id          String   @id @default(uuid()) @db.Uuid
   googleId    String   @unique @map("google_id")
@@ -39,8 +44,8 @@ model User {
   reviews        HauntedPlace[]   @relation("PlaceReviewer")
   media          EvidenceMedia[]
   visits         PlaceVisit[]
-  comments       PlaceComment[]
-  commentUpvotes CommentUpvote[]
+  comments     PlaceComment[]
+  commentVotes CommentVote[]
 
   @@map("users")
 }
@@ -130,9 +135,9 @@ model PlaceComment {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  place   HauntedPlace    @relation(fields: [placeId], references: [id], onDelete: Cascade)
-  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  upvotes CommentUpvote[]
+  place  HauntedPlace  @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  votes  CommentVote[]
 
   @@unique([placeId, userId])
   @@index([placeId])
@@ -140,11 +145,13 @@ model PlaceComment {
   @@map("place_comments")
 }
 
-model CommentUpvote {
-  id        String   @id @default(uuid()) @db.Uuid
-  commentId String   @map("comment_id") @db.Uuid
-  userId    String   @map("user_id") @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at")
+model CommentVote {
+  id        String          @id @default(uuid()) @db.Uuid
+  commentId String          @map("comment_id") @db.Uuid
+  userId    String          @map("user_id") @db.Uuid
+  type      CommentVoteType
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
 
   comment PlaceComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -152,5 +159,5 @@ model CommentUpvote {
   @@unique([commentId, userId])
   @@index([commentId])
   @@index([userId])
-  @@map("comment_upvotes")
+  @@map("comment_votes")
 }

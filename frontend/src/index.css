@@ -28,9 +28,9 @@
 :root {
   color-scheme: dark;
   --accent-rgb: 57, 255, 20;
-  --shadow-raised: 0 24px 60px -24px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.55);
-  --shadow-pin: 0 0 16px rgba(var(--accent-rgb), 0.45), 0 6px 16px rgba(0, 0, 0, 0.65);
-  --shadow-neon: 0 0 12px rgba(var(--accent-rgb), 0.55), 0 0 28px rgba(var(--accent-rgb), 0.28);
+  --shadow-raised: 0 16px 40px -20px rgba(0, 0, 0, 0.85), 0 2px 6px rgba(0, 0, 0, 0.45);
+  --shadow-pin: 0 4px 12px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(var(--accent-rgb), 0.35);
+  --shadow-neon: 0 0 0 1px rgba(var(--accent-rgb), 0.45), 0 0 10px rgba(var(--accent-rgb), 0.18);
 }
 
 * {
@@ -111,7 +111,7 @@ body {
   box-shadow: 0 0 0 1px var(--color-accent), 0 0 0 4px rgba(var(--accent-rgb), 0.18);
 }
 @utility glow-accent {
-  box-shadow: 0 0 0 1px var(--color-accent), 0 0 28px -4px rgba(var(--accent-rgb), 0.65);
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.55), 0 8px 20px -12px rgba(0, 0, 0, 0.7);
 }
 @utility font-display {
   font-family: var(--font-display);
@@ -127,7 +127,7 @@ body {
   letter-spacing: 0.02em;
   font-weight: 400;
   color: var(--color-ink);
-  text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.35), 0 2px 0 rgba(0, 0, 0, 0.85);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.85);
 }
 @utility label-sm {
   font-size: 12px;

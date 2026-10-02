@@ -45,7 +45,7 @@ export function AmbientAudioController({
         enabled
           ? inline
             ? 'text-accent'
-            : 'border-accent/50 text-accent shadow-[0_0_0_1px_rgba(74,222,128,0.25),0_0_28px_-6px_rgba(74,222,128,0.7),var(--shadow-raised)]'
+            : 'border-accent/50 text-accent shadow-[var(--shadow-raised)]'
           : 'text-muted hover:text-ink',
         className,
       )}

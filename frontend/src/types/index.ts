@@ -53,8 +53,16 @@ export type PlaceComment = {
     avatarUrl: string | null
   }
   upvoteCount: number
-  upvotedByMe: boolean
+  downvoteCount: number
+  myVote: 'up' | 'down' | null
   isMine: boolean
+}
+
+export type CommentVoteResult = {
+  commentId: string
+  myVote: 'up' | 'down' | null
+  upvoteCount: number
+  downvoteCount: number
 }
 
 export type HauntedPlace = {

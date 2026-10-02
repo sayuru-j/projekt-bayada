@@ -5,7 +5,7 @@ export function BrandMark({ size = 36, className }: { size?: number; className?:
     <span
       className={cn(
         'inline-flex shrink-0 items-center justify-center rounded-full bg-accent text-[#041a08]',
-        'shadow-[0_0_16px_rgba(57,255,20,0.45),0_1px_0_rgba(255,255,255,0.25)_inset]',
+        'shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_4px_10px_rgba(0,0,0,0.45)]',
         className,
       )}
       style={{ width: size, height: size }}

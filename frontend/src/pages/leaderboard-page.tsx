@@ -36,7 +36,7 @@ export function LeaderboardPage() {
               key={entry.user?.id ?? entry.rank}
               className={cn(
                 'panel flex items-center gap-3.5 rounded-2xl px-4 py-3 transition hover:border-border-strong',
-                entry.rank === 1 && 'glow-accent border-accent bg-surface-2',
+                entry.rank === 1 && 'border-accent/70 bg-surface-2',
               )}
             >
               <span

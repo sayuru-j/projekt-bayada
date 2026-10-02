@@ -81,7 +81,7 @@ export function UserLocationMarker({
     <Marker latitude={latitude} longitude={longitude} anchor="center" style={{ zIndex: 5 }}>
       <span className="relative flex h-9 w-9 items-center justify-center" aria-hidden>
         <span className="absolute inset-0 rounded-full bg-accent/25 [animation:pulse-ring_2.2s_ease-out_infinite]" />
-        <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[#041a08] shadow-[0_0_18px_rgba(57,255,20,0.55)]">
+        <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[#041a08] shadow-[0_0_0_1px_rgba(57,255,20,0.35),0_4px_12px_rgba(0,0,0,0.5)]">
           <Ghost size={16} strokeWidth={2.2} />
         </span>
       </span>

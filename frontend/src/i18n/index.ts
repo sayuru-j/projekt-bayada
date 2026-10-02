@@ -108,6 +108,7 @@ const dict = {
     commentLimit: 'One comment per place. Delete yours to post again.',
     commentChars: 'characters',
     upvote: 'Upvote',
+    downvote: 'Downvote',
   },
   si: {
     brand: 'බයද?',
@@ -216,6 +217,7 @@ const dict = {
     commentLimit: 'ස්ථානයකට අදහස් එකකි. නැවත ලිවීමට ඔබේ අදහස මකන්න.',
     commentChars: 'අක්ෂර',
     upvote: 'උඩු ඡන්දය',
+    downvote: 'පහළ ඡන්දය',
   },
 } as const
 

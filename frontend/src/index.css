@@ -1,0 +1,428 @@
+@import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@theme {
+  --font-sans: "Outfit", "Noto Sans Sinhala", system-ui, sans-serif;
+  --font-display: "Creepster", "Noto Sans Sinhala", cursive;
+  --font-script: "Permanent Marker", "Noto Sans Sinhala", cursive;
+
+  --color-canvas: #000000;
+  --color-surface: #0c0c0c;
+  --color-surface-2: #121212;
+  --color-surface-3: #1a1a1a;
+  --color-field: #161616;
+  --color-border: #222222;
+  --color-border-strong: #2e2e2e;
+
+  --color-ink: #ffffff;
+  --color-ink-soft: #e8e8e8;
+  --color-muted: #9a9a9a;
+  --color-faint: #5c5c5c;
+
+  --color-accent: #39ff14;
+  --color-accent-deep: #00e83a;
+  --color-danger: #f87171;
+  --color-warn: #fbbf24;
+}
+
+:root {
+  color-scheme: dark;
+  --accent-rgb: 57, 255, 20;
+  --shadow-raised: 0 24px 60px -24px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.55);
+  --shadow-pin: 0 0 16px rgba(var(--accent-rgb), 0.45), 0 6px 16px rgba(0, 0, 0, 0.65);
+  --shadow-neon: 0 0 12px rgba(var(--accent-rgb), 0.55), 0 0 28px rgba(var(--accent-rgb), 0.28);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  min-height: 100%;
+  min-height: 100dvh;
+}
+
+@supports (height: 100dvh) {
+  html,
+  body,
+  #root {
+    height: 100dvh;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11", "ss01", "tnum";
+  /* Avoid iOS rubber-band exposing white behind the app */
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+::selection {
+  background: rgba(var(--accent-rgb), 0.35);
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+  background-clip: padding-box;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Surfaces */
+@utility panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+@utility panel-raised {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-raised);
+}
+@utility ring-focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--color-accent), 0 0 0 4px rgba(var(--accent-rgb), 0.18);
+}
+@utility glow-accent {
+  box-shadow: 0 0 0 1px var(--color-accent), 0 0 28px -4px rgba(var(--accent-rgb), 0.65);
+}
+@utility font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+@utility font-script {
+  font-family: var(--font-script);
+  letter-spacing: 0.01em;
+}
+@utility text-brand {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: var(--color-ink);
+  text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.35), 0 2px 0 rgba(0, 0, 0, 0.85);
+}
+@utility label-sm {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+/* Motion */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes marquee-x {
+  0%,
+  12% {
+    transform: translateX(0);
+  }
+  88%,
+  100% {
+    transform: translateX(var(--marquee-distance, -40%));
+  }
+}
+
+.marquee-title > span {
+  animation: marquee-x 8s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-title > span {
+    animation: none;
+  }
+}
+
+.anim-fade-up {
+  animation: fade-up 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-fade-in {
+  animation: fade-in 240ms ease-out both;
+}
+.anim-pop-in {
+  animation: pop-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-slide-up {
+  animation: slide-up 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-slide-in-right {
+  animation: slide-in-right 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* Map chrome — free OSM tiles; no paid basemap filters */
+.maplibregl-canvas {
+  filter: none;
+}
+
+/* Greyscale + darken OSM to match the haunted black / mist look */
+.map-osm-raster .maplibregl-canvas {
+  filter: grayscale(0.92) brightness(0.55) contrast(1.15) saturate(0.2);
+}
+
+.maplibregl-map {
+  background: #000000;
+}
+
+.maplibregl-ctrl-bottom-left {
+  bottom: 12px !important;
+  left: 12px !important;
+}
+
+.maplibregl-ctrl-attrib {
+  background: transparent !important;
+  color: #8f8f8f !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  font-size: 10px !important;
+  margin: 0 !important;
+}
+.maplibregl-ctrl-attrib a {
+  color: #c6c6c6 !important;
+}
+
+/* Compact attrib: kill MapLibre's circled-i (black outline badge) */
+.maplibregl-ctrl-attrib.maplibregl-compact {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: 20px !important;
+  padding: 0 0 0 22px !important;
+  margin: 8px !important;
+  border-radius: 0 !important;
+}
+.maplibregl-ctrl-attrib.maplibregl-compact:after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+}
+.maplibregl-ctrl-attrib-button {
+  display: block !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+  /* Plain "i" — no circular stroke */
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23b0b0b0' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E") !important;
+  background-size: 18px 18px !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+.maplibregl-ctrl-attrib-button:focus,
+.maplibregl-ctrl-attrib-button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.maplibregl-ctrl-attrib.maplibregl-compact-show {
+  background: rgba(26, 26, 26, 0.72) !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+  padding: 4px 8px 4px 28px !important;
+}
+.maplibregl-ctrl-attrib.maplibregl-compact-show .maplibregl-ctrl-attrib-button {
+  background-color: transparent !important;
+}
+
+.maplibregl-popup {
+  z-index: 20;
+}
+.maplibregl-popup-content {
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+.maplibregl-popup-tip {
+  display: none !important;
+}
+
+.maplibregl-ctrl-group {
+  background: var(--color-surface-2) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-raised) !important;
+  overflow: hidden;
+}
+.maplibregl-ctrl-group button {
+  background-color: transparent !important;
+  width: 36px !important;
+  height: 36px !important;
+}
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--color-border) !important;
+}
+.maplibregl-ctrl-group button:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+.maplibregl-ctrl button .maplibregl-ctrl-icon {
+  filter: invert(0.92);
+}
+.maplibregl-ctrl-bottom-right {
+  bottom: 20px !important;
+  right: 20px !important;
+}
+
+/* Sonner */
+[data-sonner-toaster] [data-sonner-toast] {
+  background: var(--color-surface-2) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  color: var(--color-ink) !important;
+  box-shadow: var(--shadow-raised) !important;
+  border-radius: 14px !important;
+  font-family: var(--font-sans);
+}
+[data-sonner-toast][data-type="success"] {
+  border-color: rgba(var(--accent-rgb), 0.45) !important;
+}
+[data-sonner-toast][data-type="error"] {
+  border-color: rgba(248, 113, 113, 0.45) !important;
+}
+
+/* Native select */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c6c6c6' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px !important;
+}
+select option {
+  background: var(--color-surface-2);
+  color: var(--color-ink);
+}
+
+/* File input */
+input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-3);
+  color: var(--color-ink);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 160ms;
+}
+input[type="file"]::file-selector-button:hover {
+  background: #303030;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum AppRole {
+  user
+  contributor
+  admin
+}
+
+enum SubmissionStatus {
+  pending
+  approved
+  rejected
+}
+
+enum MediaType {
+  image
+  youtube
+}
+
+model User {
+  id          String   @id @default(uuid()) @db.Uuid
+  googleId    String   @unique @map("google_id")
+  email       String   @unique
+  username    String   @unique
+  displayName String?  @map("display_name")
+  avatarUrl   String?  @map("avatar_url")
+  role        AppRole  @default(user)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  places         HauntedPlace[]   @relation("PlaceCreator")
+  reviews        HauntedPlace[]   @relation("PlaceReviewer")
+  media          EvidenceMedia[]
+  visits         PlaceVisit[]
+  comments       PlaceComment[]
+  commentUpvotes CommentUpvote[]
+
+  @@map("users")
+}
+
+model Category {
+  id        String   @id @default(uuid()) @db.Uuid
+  slug      String   @unique
+  nameEn    String   @map("name_en")
+  nameSi    String   @map("name_si")
+  color     String   @default("#a3a3a3")
+  icon      String   @default("MapPin")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  places HauntedPlace[]
+
+  @@map("categories")
+}
+
+model HauntedPlace {
+  id               String           @id @default(uuid()) @db.Uuid
+  title            String
+  description      String
+  categoryId       String           @map("category_id") @db.Uuid
+  spookinessRating Int              @map("spookiness_rating")
+  latitude         Float
+  longitude        Float
+  nearestCity      String           @map("nearest_city")
+  status           SubmissionStatus @default(pending)
+  rejectionReason  String?          @map("rejection_reason")
+  createdById      String?          @map("created_by") @db.Uuid
+  reviewedById     String?          @map("reviewed_by") @db.Uuid
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  category   Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdBy  User?          @relation("PlaceCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy User?          @relation("PlaceReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  media      EvidenceMedia[]
+  visits     PlaceVisit[]
+  comments   PlaceComment[]
+
+  @@index([status])
+  @@index([createdById])
+  @@index([categoryId])
+  @@map("haunted_places")
+}
+
+model EvidenceMedia {
+  id           String    @id @default(uuid()) @db.Uuid
+  placeId      String    @map("place_id") @db.Uuid
+  mediaType    MediaType @map("media_type")
+  url          String
+  youtubeId    String?   @map("youtube_id")
+  uploadedById String?   @map("uploaded_by") @db.Uuid
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  place      HauntedPlace @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  uploadedBy User?        @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@map("evidence_media")
+}
+
+model PlaceVisit {
+  id         String   @id @default(uuid()) @db.Uuid
+  placeId    String   @map("place_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  checkInLat Float    @map("check_in_lat")
+  checkInLng Float    @map("check_in_lng")
+  visitedAt  DateTime @default(now()) @map("visited_at")
+
+  place HauntedPlace @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([placeId, userId])
+  @@index([userId])
+  @@index([placeId])
+  @@map("place_visits")
+}
+
+model PlaceComment {
+  id        String   @id @default(uuid()) @db.Uuid
+  placeId   String   @map("place_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  body      String   @db.VarChar(280)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  place   HauntedPlace    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  upvotes CommentUpvote[]
+
+  @@unique([placeId, userId])
+  @@index([placeId])
+  @@index([userId])
+  @@map("place_comments")
+}
+
+model CommentUpvote {
+  id        String   @id @default(uuid()) @db.Uuid
+  commentId String   @map("comment_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment PlaceComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@index([commentId])
+  @@index([userId])
+  @@map("comment_upvotes")
+}

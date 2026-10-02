@@ -6,7 +6,6 @@ import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import { categoryLabel } from '@/lib/categories'
 import { distanceKm, formatDistance } from '@/lib/geo'
-import { mediaUrl } from '@/lib/utils'
 import type { HauntedPlace, VisitResult } from '@/types'
 import { useAuth } from '@/contexts/auth-context'
 import { useLocale } from '@/contexts/locale-context'
@@ -17,6 +16,7 @@ import { CategoryAvatar } from '@/components/ui/category-icon'
 import { Avatar } from '@/components/layout/brand'
 import { MarqueeTitle } from '@/components/ui/marquee-title'
 import { PlaceComments } from '@/components/places/place-comments'
+import { EvidenceGallery } from '@/components/places/evidence-gallery'
 
 /** Must match backend VisitsService radius. */
 const VISIT_RADIUS_METERS = 500
@@ -172,41 +172,7 @@ export function PlaceDrawer({ placeId, onClose, onVisited }: Props) {
 
           <p className="text-[14px] leading-relaxed text-ink-soft">{place.description}</p>
 
-          {place.media.length > 0 && (
-            <section>
-              <h3 className="label-sm mb-2.5">{tr('evidence')}</h3>
-              <div className="space-y-2.5">
-                {place.media.map((m) =>
-                  m.mediaType === 'youtube' && m.youtubeId ? (
-                    <div
-                      key={m.id}
-                      className="overflow-hidden rounded-2xl border border-border-strong bg-black"
-                    >
-                      <iframe
-                        title="YouTube evidence"
-                        className="aspect-video w-full"
-                        src={`https://www.youtube-nocookie.com/embed/${m.youtubeId}`}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      key={m.id}
-                      className="overflow-hidden rounded-2xl border border-border-strong"
-                    >
-                      <img
-                        src={mediaUrl(m.url)}
-                        alt=""
-                        loading="lazy"
-                        className="max-h-60 w-full object-cover"
-                      />
-                    </div>
-                  ),
-                )}
-              </div>
-            </section>
-          )}
+          <EvidenceGallery media={place.media} />
 
           <section className="rounded-2xl border border-border-strong bg-surface-3 p-4">
             <div className="mb-3 flex items-center justify-between">

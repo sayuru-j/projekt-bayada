@@ -109,6 +109,7 @@ const dict = {
     commentChars: 'characters',
     upvote: 'Upvote',
     downvote: 'Downvote',
+    viewFullImage: 'View full size',
   },
   si: {
     brand: 'බයද?',
@@ -218,6 +219,7 @@ const dict = {
     commentChars: 'අක්ෂර',
     upvote: 'උඩු ඡන්දය',
     downvote: 'පහළ ඡන්දය',
+    viewFullImage: 'සම්පූර්ණ ප්‍රමාණයෙන් බලන්න',
   },
 } as const
 

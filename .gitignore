@@ -23,6 +23,9 @@ Thumbs.db
 !.vscode/extensions.json
 .cursor/
 
+# Local deploy tooling (credentials + helpers)
+scripts/
+
 # Misc
 *.tsbuildinfo
 .turbo
